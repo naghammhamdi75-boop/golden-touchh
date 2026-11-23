@@ -1,0 +1,67 @@
+GOLDEN TOUCH — GUIDE DE DÉMARRAGE
+================================
+
+1. OUVRIR LE SITE
+- Placez tous les fichiers dans le même dossier.
+- Ouvrez ce dossier avec Visual Studio Code.
+- Pour lancer le site en local, ouvrez un terminal dans le dossier et exécutez :
+  python -m http.server 8000
+- Ouvrez ensuite http://localhost:8000 dans votre navigateur.
+- Évitez file:// : les modules et services externes fonctionnent mieux via HTTP.
+
+2. PAGES
+- index.html : accueil
+- produits.html : catalogue et filtres
+- categorie.html?cat=colliers|bracelets|bagues|boucles : pages catégories
+- produit.html?id=... : fiche produit
+- inscription.html / connexion.html / compte.html : espace client
+- panier.html : panier
+- commande.html / confirmation.html : commande de démonstration
+- a-propos.html / contact.html : pages institutionnelles
+- style.css : design
+- app.js : catalogue et interactions
+- supabase-config.js : configuration Supabase
+
+3. FONCTIONNALITÉS DÉJÀ DISPONIBLES EN MODE DÉMONSTRATION
+- Navigation responsive et liens entre pages.
+- Catalogue, catégories, fiches produits et recherche/filtres.
+- Panier stocké dans le navigateur (localStorage) : ajout, quantité, suppression et total.
+- Création d'une session de démonstration (sessionStorage). Le mot de passe n'est pas stocké.
+- Checkout de démonstration et confirmation locale ; aucune commande n'est envoyée à un serveur.
+- Paiement simulé uniquement : aucune donnée bancaire n'est demandée et aucune transaction réelle n'est effectuée.
+
+IMPORTANT : la session de démonstration n'est PAS une authentification sécurisée. Elle sert uniquement à présenter le parcours dans un TP. Ne l'utilisez pas pour un vrai commerce ni avec des mots de passe réels.
+
+4. ACTIVER LES VRAIS COMPTES SUPABASE
+- Créez un projet Supabase.
+- Dans Authentication > URL Configuration, configurez le Site URL et les URL de redirection correspondant à votre site local et à votre futur domaine.
+- Dans Project Settings > API, copiez l'URL du projet et la clé publique (publishable/anon).
+- Collez-les dans supabase-config.js dans les champs supabaseUrl et supabaseAnonKey.
+- Ne placez JAMAIS service_role, mot de passe SQL, clé privée ou secret SMTP dans le site.
+- Activez la confirmation e-mail et configurez un SMTP personnalisé avant un usage réel.
+- Le code utilise Supabase Auth v2 pour inscription et connexion dès que les deux paramètres sont renseignés.
+
+5. CE QUI RESTE À FAIRE POUR UNE VRAIE BOUTIQUE
+- Créer les tables nécessaires (profils, commandes, lignes de commande) et les politiques RLS dans Supabase.
+- Créer une fonction SQL transactionnelle pour recalculer les prix côté serveur, vérifier les stocks et enregistrer les commandes.
+- Connecter l'historique de commandes à l'utilisateur authentifié.
+- Configurer les frais de livraison, coordonnées officielles, politique de retour et conditions de vente.
+- Remplacer les articles, prix et images d'exemple par le vrai catalogue validé. Les prix actuels sont indicatifs.
+- Tester les e-mails, règles RLS, parcours de commande et affichage mobile.
+- Choisir un hébergeur et configurer les redirections Supabase pour le domaine public.
+
+6. PERSONNALISER LES PRODUITS
+Le tableau PRODUCTS se trouve au début de app.js. Chaque article contient id, name, cat, slug, price (TND), tag, desc et img. Modifiez les exemples avec les informations et photos réelles. Les images de cette version sont des liens externes de démonstration.
+
+7. CONTACT
+Les coordonnées n'ont pas été fournies. Le formulaire de contact et la newsletter affichent donc une confirmation de démonstration sans envoyer d'e-mail.
+
+
+8. OPTIMISATIONS DE PERFORMANCE APPORTÉES
+- Réduction de la largeur/qualité des images distantes Unsplash pour limiter le poids téléchargé.
+- Chargement différé (lazy loading) et décodage asynchrone des images hors écran.
+- Priorité de chargement à l'image principale de la page d'accueil.
+- Préconnexion aux domaines des images et des polices.
+- Chargement différé des scripts JavaScript.
+- Chargement du SDK Supabase uniquement sur les pages qui utilisent l'authentification.
+Remarque : le score Lighthouse dépend aussi du réseau, de l'appareil et du cache. Il faut relancer le test après publication pour mesurer le résultat réel.
